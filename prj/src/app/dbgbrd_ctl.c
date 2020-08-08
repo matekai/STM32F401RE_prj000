@@ -171,6 +171,7 @@ static void dbgbrd_ctl_pon( CMD_RCVD *cmd_rcvd )
 			/* 応答データ作成 */
 			tsprintf(str, "%s%d output to 1\r\n", PORT_TYPE_STR[ ptype ], ptno ) ;
 			pccom_send_set( ( U8 * )str, strlen( str ) ) ;
+
 		}
 	}
 	else
@@ -178,6 +179,8 @@ static void dbgbrd_ctl_pon( CMD_RCVD *cmd_rcvd )
 		/* エラーメッセージ送付 */
 		pccom_send_set( ( U8 * )ERRMSG_INVALID_INPUT, strlen( ERRMSG_INVALID_INPUT ) ) ;
 	}
+	/* 入力待ちを送付 */
+	pccom_send_sig4input( ) ;
 
 	return ;
 }
@@ -228,6 +231,8 @@ static void dbgbrd_ctl_poff( CMD_RCVD *cmd_rcvd )
 		/* エラーメッセージ送付 */
 		pccom_send_set( ( U8 * )ERRMSG_INVALID_INPUT, strlen( ERRMSG_INVALID_INPUT ) ) ;
 	}
+	/* 入力待ちを送付 */
+	pccom_send_sig4input( ) ;
 
 	return ;
 }
@@ -278,6 +283,8 @@ static void dbgbrd_ctl_pin( CMD_RCVD *cmd_rcvd )
 		/* エラーメッセージ送付 */
 		pccom_send_set( ( U8 * )ERRMSG_INVALID_INPUT, strlen( ERRMSG_INVALID_INPUT ) ) ;
 	}
+	/* 入力待ちを送付 */
+	pccom_send_sig4input( ) ;
 
 	return ;
 }
@@ -302,6 +309,9 @@ static void dbgbrd_ctl_ver( void )
 	tsprintf( str, "Version: %s\r\n", VERSION ) ;
 	pccom_send_set( ( U8 * )str, strlen( str ) ) ;
 
+	/* 入力待ちを送付 */
+	pccom_send_sig4input( ) ;
+
 	return ;
 }
 
@@ -323,6 +333,8 @@ static void dbgbrd_ctl_help( void )
 	/* ヘルプ情報出力 */
 	pccom_send_set( ( U8 * )HELP_MSG, strlen( HELP_MSG ) ) ;
 
+	/* 入力待ちを送付 */
+	pccom_send_sig4input( ) ;
 	return ;
 }
 

@@ -44,6 +44,7 @@
 ======================================*/
 Extern void pccom_send_cycle( void ) ;
 Extern U8 pccom_send_set( U8 *, U16 ) ;
+Extern U8 pccom_send_sig4input( void ) ;
 Extern void pccom_send_initram( void ) ;
 
 #undef Extern

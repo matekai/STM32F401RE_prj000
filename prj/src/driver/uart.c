@@ -151,6 +151,8 @@ U8 stm32_uart1_getrcv( U8 *data )
 			/* 受信バッファからデータを取得する */
 			rcv_data = USART1_DR ;
 			*data    = ( U8 )( rcv_data & 0x000000FFUL ) ;
+			/* エコーするために受信した文字を送り返す */
+			stm32_uart1_send( *data ) ;
 			/* 戻り値 = TRUE */
 			ret = U8_BOOL_TRUE ;
 		}

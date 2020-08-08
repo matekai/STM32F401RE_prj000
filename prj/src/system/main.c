@@ -79,6 +79,7 @@ static void modinit( void ) ;
 int main( int argc, char **argv )
 {
 	U32 cnt ;
+
 	CMD_RCVD cmd_rcvd ;
 	U8 call_rslt ;
 
@@ -88,6 +89,8 @@ int main( int argc, char **argv )
 	hwinit( ) ;
 	/* ‰Šú‘—M•¶š—ñİ’è */
 	pccom_send_set( ( U8 * )WELCOME_STRING, strlen( WELCOME_STRING ) ) ;
+	/* “ü—Í‘Ò‚¿‘—M */
+	pccom_send_sig4input( ) ;
 	/* Š„‚è‚İ‹–‰Â */
 	ENABLE_INT ;
 

@@ -146,27 +146,38 @@ static U16 local_getline( C8 *str_set, C8 *str_rcv, U16 nrcvd )
 		/* ラインバッファが1行分全部埋まっていない？ */
 		if( local_lbpos < CHAR_PER_LINE )
 		{
-			/* 入力文字を1文字、ラインバッファに複写 */
-			lineBufIn[ local_lbpos ] = str_rcv[ i ] ;
-			/* 末尾にNULL文字を加え、strstrで改行文字があるか調べる */
-			lineBufIn[ local_lbpos + 1 ] = '\0' ;
-			p_call_rslt = strstr( lineBufIn, LINE_TERMINATOR ) ;
-
-			/* 改行文字あり？ */
-			if( p_call_rslt != NULL_PTR )
+			/* 入力文字がBS(0x08)？ */
+			if( str_rcv[ i ] == 0x08 )
 			{
-				/* 改行文字をNUL文字に変える */
-				*p_call_rslt = '\0' ;
-				/* 文字列を格納バッファに複写する(改行文字の2文字分減らす) */
-				strncpy( str_set, lineBufIn, MAX_LINEBUF ) ;
-				/* ラインバッファインデックスを巻き戻す */
-				local_lbpos = 0 ;
+				/* 前一文字を上書きするために、local_lbposをデクリする(0でなければ) */
+				if( local_lbpos > 0 )
+				{
+					local_lbpos-- ;
+				}
 			}
 			else
 			{
-				/* ラインバッファインデックスを1つインクリ */
-				local_lbpos++ ;
+				/* 入力文字を1文字、ラインバッファに複写 */
+				lineBufIn[ local_lbpos ] = str_rcv[ i ] ;
+				/* 末尾にNULL文字を加え、strstrで改行文字があるか調べる */
+				lineBufIn[ local_lbpos + 1 ] = '\0' ;
+				p_call_rslt = strstr( lineBufIn, LINE_TERMINATOR ) ;
 
+				/* 改行文字あり？ */
+				if( p_call_rslt != NULL_PTR )
+				{
+					/* 改行文字をNUL文字に変える */
+					*p_call_rslt = '\0' ;
+					/* 文字列を格納バッファに複写する(改行文字の2文字分減らす) */
+					strncpy( str_set, lineBufIn, MAX_LINEBUF ) ;
+					/* ラインバッファインデックスを巻き戻す */
+					local_lbpos = 0 ;
+				}
+				else
+				{
+					/* ラインバッファインデックスを1つインクリ */
+					local_lbpos++ ;
+				}
 			}
 		}
 		/* 80文字受信しても改行がない場合は、そこで文字入力を打ち切る */
